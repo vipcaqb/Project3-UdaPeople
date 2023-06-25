@@ -311,7 +311,7 @@ jobs:
             
   notify:
     docker:
-      - image: circleci/node:13.8.0
+      - image: cimg/base:stable
     steps:
       - slack/notify:
           custom: |
@@ -363,5 +363,7 @@ workflows:
       #     requires: [smoke-test]
       # - cleanup:
       #     requires: [cloudfront-update]
+  send-notification:
+    jobs:
       - notify:
           context: slack-secrets
