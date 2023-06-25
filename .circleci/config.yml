@@ -363,7 +363,5 @@ workflows:
       #     requires: [smoke-test]
       # - cleanup:
       #     requires: [cloudfront-update]
-  send-notification:
-    jobs:
       - notify:
           context: slack-secrets
