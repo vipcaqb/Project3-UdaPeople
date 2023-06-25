@@ -31,7 +31,10 @@ commands:
             #  Add revert code here. You can find this in the Getting Started section.
               exit 1
             fi
-            
+
+orbs:
+  slack: circleci/slack@4.12.5
+
 jobs:
   build-frontend:
     docker:
@@ -306,6 +309,27 @@ jobs:
 #               # your code here
 #             fi
             
+  notify:
+    docker:
+      - image: circleci/node:13.8.0
+    steps:
+      - slack/notify:
+          custom: |
+            {
+              "blocks": [
+                {
+                  "type": "section",
+                  "fields": [
+                    {
+                      "type": "plain_text",
+                      "text": "*This is a text notification*",
+                      "emoji": true
+                    }
+                  ]
+                }
+              ]
+            }
+          event: always
 
 workflows:
   default:
@@ -339,3 +363,7 @@ workflows:
       #     requires: [smoke-test]
       # - cleanup:
       #     requires: [cloudfront-update]
+  send-notification:
+    jobs:
+      - notify:
+          context: slack-secrets
