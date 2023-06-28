@@ -170,8 +170,10 @@ jobs:
       - run:
           name: Add back-end ip to ansible inventory
           command: |
-            # Your code here
-            exit 1
+            INVENTORY_FILE=project/.circleci/ansible/inventory.txt
+            BACKEND_IP=54.152.50.217
+            echo "backend ansible_host=$BACKEND_IP" >> $INVENTORY_FILE
+            exit 0
       - persist_to_workspace:
           root: ~/
           paths:
