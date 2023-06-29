@@ -12,10 +12,10 @@ commands:
         when: on_fail
         command: |
           # Destroy back-end stack
-          aws cloudformation delete-stack --stack-name "udapeople-backend-${workflow-id:0:7}"
+          aws cloudformation delete-stack --stack-name "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}"
 
           # Destroy front-end stack
-          aws cloudformation delete-stack --stack-name "udapeople-frontend-${workflow-id:0:7}"
+          aws cloudformation delete-stack --stack-name "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}"
 
           # Additional cleanup steps can be added here if needed
           exit 0
