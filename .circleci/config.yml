@@ -151,69 +151,69 @@ jobs:
           paths: [backend/node_modules]
           key: backend-scan
 
-deploy-infrastructure:
-  docker:
-    - image: amazon/aws-cli
-  steps:
-    - checkout
-    - run:
-        name: Ensure back-end infrastructure exists
-        command: |
-          if ! aws cloudformation deploy \
-            --template-file .circleci/files/backend.yml \
-            --stack-name "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}" \
-            --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"  \
-            --tags project=udapeople; then
-            # Rollback on failure
-            aws cloudformation delete-stack --stack-name "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}"
-            exit 1
-          fi
-          exit 0
-    - run:
-        name: Ensure front-end infrastructure exists
-        command: |
-          if ! aws cloudformation deploy \
-            --template-file .circleci/files/frontend.yml \
-            --stack-name "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}" \
-            --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"  \
-            --tags project=your-tag; then
-            # Rollback on failure
-            aws cloudformation delete-stack --stack-name "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}"
-            exit 1
-          fi
-          exit 0
-    - run:
-        name: Add back-end IP to Ansible inventory
-        command: |
-          INVENTORY_FILE=project/.circleci/ansible/inventory.txt
-          BACKEND_IP=54.152.50.217
-          echo "backend ansible_host=$BACKEND_IP" >> $INVENTORY_FILE
-          exit 0
-    - persist_to_workspace:
-        root: ~/
-        paths:
-          - project/.circleci/ansible/inventory.txt
-    - run:
-        name: Rollback on failure
-        command: |
-          # Read the status of the previous steps
-          status_backend=$?
-          status_frontend=$?
+  deploy-infrastructure:
+    docker:
+      - image: amazon/aws-cli
+    steps:
+      - checkout
+      - run:
+          name: Ensure back-end infrastructure exists
+          command: |
+            if ! aws cloudformation deploy \
+              --template-file .circleci/files/backend.yml \
+              --stack-name "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}" \
+              --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"  \
+              --tags project=udapeople; then
+              # Rollback on failure
+              aws cloudformation delete-stack --stack-name "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}"
+              exit 1
+            fi
+            exit 0
+      - run:
+          name: Ensure front-end infrastructure exists
+          command: |
+            if ! aws cloudformation deploy \
+              --template-file .circleci/files/frontend.yml \
+              --stack-name "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}" \
+              --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"  \
+              --tags project=your-tag; then
+              # Rollback on failure
+              aws cloudformation delete-stack --stack-name "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}"
+              exit 1
+            fi
+            exit 0
+      - run:
+          name: Add back-end IP to Ansible inventory
+          command: |
+            INVENTORY_FILE=project/.circleci/ansible/inventory.txt
+            BACKEND_IP=54.152.50.217
+            echo "backend ansible_host=$BACKEND_IP" >> $INVENTORY_FILE
+            exit 0
+      - persist_to_workspace:
+          root: ~/
+          paths:
+            - project/.circleci/ansible/inventory.txt
+      - run:
+          name: Rollback on failure
+          command: |
+            # Read the status of the previous steps
+            status_backend=$?
+            status_frontend=$?
 
-          if [ $status_backend -eq 1 ] || [ $status_frontend -eq 1 ]; then
-            # Rollback steps
-            echo "Rolling back..."
+            if [ $status_backend -eq 1 ] || [ $status_frontend -eq 1 ]; then
+              # Rollback steps
+              echo "Rolling back..."
 
-            # Rollback back-end infrastructure
-            aws cloudformation delete-stack --stack-name "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}"
+              # Rollback back-end infrastructure
+              aws cloudformation delete-stack --stack-name "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}"
 
-            # Rollback front-end infrastructure
-            aws cloudformation delete-stack --stack-name "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}"
+              # Rollback front-end infrastructure
+              aws cloudformation delete-stack --stack-name "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}"
 
-            # Add additional rollback steps here if needed
-          fi
+              # Add additional rollback steps here if needed
+            fi
 
-          exit 0  
+            exit 0  
 
 #   configure-infrastructure:
 #     docker:
