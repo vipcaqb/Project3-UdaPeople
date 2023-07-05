@@ -1,7 +1,7 @@
 ---
 
 - name: "configuration play." 
-  hosts: localhost
+  hosts: web
   user: ubuntu
   become: true
   become_method: sudo
