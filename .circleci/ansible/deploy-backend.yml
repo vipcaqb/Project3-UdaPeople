@@ -1,8 +1,7 @@
 ---
 
 - name: "configuration play." 
-  hosts: localhost
-  connection: local
+  hosts: web
   remote_user: ubuntu
   gather_facts: false
   vars:
