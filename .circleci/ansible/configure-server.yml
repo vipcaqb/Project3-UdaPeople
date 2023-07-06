@@ -1,7 +1,8 @@
 ---
 
 - name: "configuration play." 
-  hosts: web
+  hosts: localhost
+  connection: local
   remote_user: ubuntu
   become: true
   become_method: sudo
