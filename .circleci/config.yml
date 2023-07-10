@@ -190,38 +190,29 @@ jobs:
 
   deploy-infrastructure:
     docker:
-      - image: amazon/aws-cli
+      - image: circleci/python:3.10
     steps:
       - checkout
+      - install_awscli
       - restore_cache:
           keys: [infrastructure-deploy]
       - run: yum install -y tar gzip
       - run:
           name: Ensure back-end infrastructure exists
           command: |
-            if ! aws cloudformation deploy \
+            aws cloudformation deploy \
               --template-file .circleci/files/backend.yml \
-              --stack-name "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}" \
-              --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"  \
-              --tags project=udapeople; then
-              # Rollback on failure
-              aws cloudformation delete-stack --stack-name "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}"
-              exit 1
-            fi
-            exit 0
+              --tags project=udapeople \
+              --stack-name udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7} \
+              --parameter-overrides ID=${CIRCLE_WORKFLOW_ID:0:7}
       - run:
           name: Ensure front-end infrastructure exists
           command: |
-            if ! aws cloudformation deploy \
+            aws cloudformation deploy \
               --template-file .circleci/files/frontend.yml \
-              --stack-name "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}" \
-              --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"  \
-              --tags project=your-tag; then
-              # Rollback on failure
-              aws cloudformation delete-stack --stack-name "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}"
-              exit 1
-            fi
-            exit 0
+              --tags project=udapeople \
+              --stack-name udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7} \
+              --parameter-overrides ID=${CIRCLE_WORKFLOW_ID:0:7}
       - run:
           name: Add back-end IP to Ansible inventory
           command: |
@@ -230,7 +221,6 @@ jobs:
             --query "Reservations[*].Instances[*].[PublicIpAddress]" \
             --output text >> ~/project/.circleci/ansible/inventory.txt
             cat ~/project/.circleci/ansible/inventory.txt
-            exit 0
       - persist_to_workspace:
           root: ~/
           paths:
