@@ -270,7 +270,7 @@ jobs:
       - restore_cache:
           keys: [backend-build]
       - run:
-          name: Run migration
+          name: Run migrations
           command: |
             cd backend
             npm install
