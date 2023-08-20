@@ -326,7 +326,7 @@ jobs:
                     
   deploy-backend:
     docker:
-      - image: cimg/base:stable
+      - image: python:3.7-alpine3.16
     steps:
       - checkout
       - install_awscli
@@ -339,8 +339,7 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            cd backend
-            npm install
+            apk add --update --no-cache tar gzip nodejs npm aws-cli ansible curl
       - run:
           name: Package Backend
           command: |
@@ -399,8 +398,8 @@ jobs:
             else
               exit 1
             fi
-      # - destroy-environment:
-      #     workflow-id: ${CIRCLE_WORKFLOW_ID:0:7} 
+      - destroy-environment:
+          workflow-id: ${CIRCLE_WORKFLOW_ID:0:7} 
       - revert-migrations:
           id: ${CIRCLE_WORKFLOW_ID:0:7}     
 
