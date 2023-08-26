@@ -354,9 +354,14 @@ jobs:
       - run:
           name: Deploy backend
           command: |
-            export TYPEORM_MIGRATIONS_DIR=./src/migrations
-            export TYPEORM_ENTITIES=./src/modules/domain/**/*.entity.ts
-            export TYPEORM_MIGRATIONS=./src/migrations/*.ts
+            # export TYPEORM_MIGRATIONS_DIR=./src/migrations
+            # export TYPEORM_ENTITIES=./src/modules/domain/**/*.entity.ts
+            # export TYPEORM_MIGRATIONS=./src/migrations/*.ts
+            cd backend
+            npm install
+            npm run build
+            cd ..
+            tar -C backend -czvf artifact.tar.gz .
             
             cd .circleci/ansible
             echo "Contents  of the inventory.txt file is -------"
@@ -385,7 +390,7 @@ jobs:
             echo $API_URL
             if curl "${API_URL}/api/status" | grep "ok"
             then
-              exit 0
+              exit 1
             else
               exit 1
             fi
