@@ -1,27 +1,23 @@
-- name: "Install node exporter"
+---
+- name: Create directory
+  become: yes
+  file:
+    path: /home/ubuntu/backend
+    state: directory
+
+- name: Copy compressed backend folder
+  become: yes
   unarchive:
-    src: https://github.com/prometheus/node_exporter/releases/download/v0.17.0/node_exporter-0.17.0.linux-amd64.tar.gz
-    dest: /tmp
-    remote_src: yes
+    src: ~/project/artifact.tar.gz
+    dest: /home/ubuntu/backend
+    owner: ubuntu
 
-- name: "Move binary to /usr/local/bin"
-  become: true
-  copy:
-    src: /tmp/node_exporter-0.17.0.linux-amd64/node_exporter
-    dest: /usr/local/bin/node_exporter
-    remote_src: yes
-    mode: '0777'
-    
-- name: "Add node exporter configuration"
-  become: true
-  copy:
-    src: node_exporter.service
-    dest: /etc/systemd/system/
-
-- name: "Enable node_exporter service"
-  become: true
-  systemd:
-    state: restarted
-    daemon_reload: yes
-    name: node_exporter
-    enabled: yes
+- name: Run the web server
+  become: yes
+  shell:
+    cmd: |
+      npm install
+      cd /home/ubuntu/backend
+      pm2 stop backend
+      pm2 delete backend
+      pm2 start npm -- start
