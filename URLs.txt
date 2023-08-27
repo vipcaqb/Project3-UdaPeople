@@ -1,3 +1,3 @@
     ##Github url
     URL01: https://github.com/vipcaqb/Project3-UdaPeople
-    URL02: http://udapeople-39f60c1.s3-website-us-east-1.amazonaws.com/
+    URL02: http://udapeople-46cc2b4.s3-website-us-east-1.amazonaws.com/
