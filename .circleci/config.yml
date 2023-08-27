@@ -412,7 +412,7 @@ jobs:
 
   cloudfront-update:
     docker:
-      - image: cimg/base:stable
+      - image: python:3.7-alpine3.11
     steps:
       # Checkout code from git
       - checkout
@@ -448,7 +448,7 @@ jobs:
 
   cleanup:
     docker:
-      - image: cimg/base:stable
+      - image: python:3.7-alpine3.11
     steps:
       - checkout
       - install_awscli
