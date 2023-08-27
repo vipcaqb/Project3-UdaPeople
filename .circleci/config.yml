@@ -425,7 +425,7 @@ jobs:
                         --no-paginate --output text)
               echo OldWorkflowID: "${OldWorkflowID}"
               echo CIRCLE_WORKFLOW_ID "${CIRCLE_WORKFLOW_ID:0:7}"
-              curl --insecure https://kvdb.io/cV7MFaEScS3FcqRxFEraB/OldWorkflowId -d "${OldWorkflowID}"
+              curl https://kvdb.io/cV7MFaEScS3FcqRxFEraB/OldWorkflowId -d "${OldWorkflowID}"
       - run:
           name: Update cloudfront distribution
           command: |
@@ -449,7 +449,7 @@ jobs:
       - run:
           name: Remove old stacks and files
           command: |
-            export OldWorkflowID=$(curl --insecure https://kvdb.io/cV7MFaEScS3FcqRxFEraB/OldWorkflowId)
+            OldWorkflowID=$(curl https://kvdb.io/cV7MFaEScS3FcqRxFEraB/OldWorkflowId)
             echo old Workflow ID : "${OldWorkflowID}"
             if [[ "${CIRCLE_WORKFLOW_ID:0:7}" != "${OldWorkflowID:10:17}" ]]
             then
