@@ -429,9 +429,6 @@ jobs:
             echo "The value of OldWorkflowID:"
 
             cat .circleci/files/OldWorkflowID.txt
-#              echo OldWorkflowID: "${OldWorkflowID}"
-#              echo CIRCLE_WORKFLOW_ID "${CIRCLE_WORKFLOW_ID:0:7}"
-#              curl --insecure https://kvdb.io/cV7MFaEScS3FcqRxFEraB/OldWorkflowId -d "${OldWorkflowID}"
       - run:
           name: Update cloudfront distribution
           command: |
@@ -457,18 +454,16 @@ jobs:
         - install_awscli
         - install_nodejs
         - run:
-          name: Remove old stacks and files
-          command: |
-#              OldWorkflowID=$(curl --insecure https://kvdb.io/cV7MFaEScS3FcqRxFEraB/OldWorkflowId)
-#              echo oldWorkflowID : "${OldWorkflowID}"
-            export OldWorkflowID=$(cat .circleci/files/OldWorkflowID.txt)
+            name: Remove old stacks and files
+            command: |
+              export OldWorkflowID=$(cat .circleci/files/OldWorkflowID.txt)
 
-            if [[ "${CIRCLE_WORKFLOW_ID:0:7}" != "${OldWorkflowID:10:17}" ]]
-            then
-              aws s3 rm "s3://udapeople-${OldWorkflowID:10:17}" --recursive
-              aws cloudformation delete-stack --stack-name "udapeople-backend-${OldWorkflowID:10:17}"
-              aws cloudformation delete-stack --stack-name "udapeople-frontend-${OldWorkflowID:10:17}"
-            fi
+              if [[ "${CIRCLE_WORKFLOW_ID:0:7}" != "${OldWorkflowID:10:17}" ]]
+              then
+                aws s3 rm "s3://udapeople-${OldWorkflowID:10:17}" --recursive
+                aws cloudformation delete-stack --stack-name "udapeople-backend-${OldWorkflowID:10:17}"
+                aws cloudformation delete-stack --stack-name "udapeople-frontend-${OldWorkflowID:10:17}"
+              fi
       - destroy-environment:
           workflow-id: ${CIRCLE_WORKFLOW_ID:0:7} 
       - revert-migrations:
