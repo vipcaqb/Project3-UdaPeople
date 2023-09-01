@@ -2,7 +2,6 @@
     URL01: https://github.com/vipcaqb/Project3-UdaPeople
     URL02: 
     1.Public URL for front-end
-    http://udapeople-f949817.s3-website-us-east-1.amazonaws.com/#/employees
-    2. Public URL for back-end
-
-    3.
+    http://udapeople-ef03c24.s3-website-us-east-1.amazonaws.com/#/employees
+    2. Prometheus
+    http://ec2-3-219-69-23.compute-1.amazonaws.com:9090/targets
