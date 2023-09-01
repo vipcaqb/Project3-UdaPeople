@@ -40,7 +40,7 @@ commands:
               cd ~/project/backend
               npm install
               npm run build
-              npm run migration:revert
+              npm run migrations:revert
             fi
   install_awscli:
     description: Install AWS CLI v2
