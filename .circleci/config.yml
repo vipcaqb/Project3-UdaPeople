@@ -31,16 +31,15 @@ commands:
     steps:
       - run:
           name: Revert migrations
-          working_directory: ./backend
           when: on_fail
           command: |
             SUCCESS=$(curl --insecure https://kvdb.io/cV7MFaEScS3FcqRxFEraB/migration_${CIRCLE_WORKFLOW_ID:0:7})
             echo $SUCCESS
-            if [[ "$SUCCESS" == "1" ]]
+            if (($SUCCESS==1));
             then
-              pwd
-              ls -la
+              cd ~/project/backend
               npm install
+              npm run build
               npm run migration:revert
             fi
   install_awscli:
@@ -390,7 +389,7 @@ jobs:
             echo $API_URL
             if curl "${API_URL}/api/status" | grep "ok"
             then
-              exit 0
+              exit 1
             else
               exit 1
             fi

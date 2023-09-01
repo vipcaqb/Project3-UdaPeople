@@ -1,3 +1,8 @@
     ##Github url
     URL01: https://github.com/vipcaqb/Project3-UdaPeople
-    URL02: http://udapeople-46cc2b4.s3-website-us-east-1.amazonaws.com/
+    URL02: 
+    1.Public URL for front-end
+    http://udapeople-f949817.s3-website-us-east-1.amazonaws.com/#/employees
+    2. Public URL for back-end
+
+    3.
